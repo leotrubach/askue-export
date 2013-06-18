@@ -25,7 +25,7 @@ def date_from_filename(s):
 
 def process_askue():
     e = Exporter()
-    with FTP(S.DB_HOST, S.FTP_USER, S.FTP_PASSWORD) as fc:
+    with FTP(S.FTP_SERVER, S.FTP_USER, S.FTP_PASSWORD) as fc:
         # Find files and retrieve it
         inbox_files = fc.mlsd(S.REMS_PATH)
         filenames = [e[0] for e in inbox_files if askue_filename(e[0])]
