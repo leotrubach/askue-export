@@ -18,7 +18,7 @@ def askue_filename(s):
 
 def date_from_filename(s):
     try:
-        datetime.strptime(s[:8], '%d%m%Y')
+        return datetime.strptime(s[:8], '%d%m%Y')
     except ValueError:
         return datetime(1970, 1, 1)
 
