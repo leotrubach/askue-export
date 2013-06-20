@@ -53,9 +53,9 @@ def process_askue():
         logging.info('Retrieving {}...'.format(rfile))
         tf = NamedTemporaryFile()
         fc.retrbinary('RETR {}'.format(j(S.REMS_PATH, rfile)), tf.write)
-        # Append data to file
-        lines = (record_to_csv(rec) for rec in e.get_routes(datetime.now()))
-        append_lines(tf, lines)
+        if S.APPEND_ON:
+            lines = (record_to_csv(rec) for rec in e.get_routes(datetime.now()))
+            append_lines(tf, lines)
         tf.seek(0)
         dest_path = j(S.IOMM_PATH, rfile)
         # Send file back to FTP

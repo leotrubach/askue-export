@@ -15,6 +15,8 @@ LOG_DIR = 'logs'
 LOG_FILE = j('logs', 'exporter.log')
 RETRY_INTERVAL = 60
 
+APPEND_ON = True
+
 try:
     from local_settings import *
 except ImportError:
