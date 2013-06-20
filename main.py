@@ -2,6 +2,7 @@ from datetime import datetime
 from exporter import Exporter, record_to_csv
 from ftplib import FTP
 import logging
+import logging.handlers
 from tempfile import NamedTemporaryFile
 import os
 from os.path import join as j, exists, dirname
