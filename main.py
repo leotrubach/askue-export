@@ -69,7 +69,7 @@ def process_askue():
 
 def main():
     process_askue()
-    time.sleep(60000)
+    time.sleep(60)
 
 
 if __name__ == '__main__':
