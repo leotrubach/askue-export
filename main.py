@@ -68,8 +68,9 @@ def process_askue():
 
 
 def main():
-    process_askue()
-    time.sleep(60)
+    while True:
+        process_askue()
+        time.sleep(S.RETRY_INTERVAL)
 
 
 if __name__ == '__main__':

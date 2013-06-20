@@ -13,6 +13,7 @@ REMS_PATH = '/REMS/'
 IOMM_PATH = '/asiomm_outbox/'
 LOG_DIR = 'logs'
 LOG_FILE = j('logs', 'exporter.log')
+RETRY_INTERVAL = 60
 
 try:
     from local_settings import *
