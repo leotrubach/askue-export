@@ -3,12 +3,26 @@ from exporter import Exporter, record_to_csv
 from ftplib import FTP
 import logging
 from tempfile import NamedTemporaryFile
-from os.path import join as j
+import os
+from os.path import join as j, exists, dirname
 import re
 import time
 
 import settings as S
 from utils import append_lines
+
+if not exists(S.LOG_DIR):
+    os.mkdir(S.LOG_DIR)
+LOGGING_FORMAT = '%(levelname)s:%(filename)s:%(asctime)s:%(message)s'
+logging.basicConfig(format=LOGGING_FORMAT)
+rl = logging.getLogger()
+rl.setLevel(logging.DEBUG)
+formatter = logging.Formatter(LOGGING_FORMAT)
+fh = logging.handlers.RotatingFileHandler(
+    S.LOG_FILE, maxBytes=1000000, backupCount=10)
+fh.setFormatter(formatter)
+rl.addHandler(fh)
+
 
 ASKUE_FNAME_REGEXP = re.compile('^\d{8}askct_to_iomm\.txt$')
 

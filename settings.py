@@ -1,3 +1,5 @@
+from os.path import join as j
+
 DB_HOST = '127.0.0.1'
 DB_PORT = 5555
 DATABASE = 'rems_db'
@@ -9,6 +11,8 @@ FTP_PASSWORD = 'as948djks'
 TEMP_PATH = '/REMS/TEMP'
 REMS_PATH = '/REMS/'
 IOMM_PATH = '/asiomm_outbox/'
+LOG_DIR = 'logs'
+LOG_FILE = j('logs', 'exporter.log')
 
 try:
     from local_settings import *
