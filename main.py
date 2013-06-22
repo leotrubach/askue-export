@@ -69,8 +69,12 @@ def process_askue():
 
 def main():
     while True:
-        process_askue()
-        time.sleep(S.RETRY_INTERVAL)
+        try:
+            process_askue()
+            time.sleep(S.RETRY_INTERVAL)
+        except Exception:
+            logging.exception('Got exception:')
+            pass
 
 
 if __name__ == '__main__':
