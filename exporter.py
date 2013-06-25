@@ -23,7 +23,7 @@ class Exporter(object):
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as c:
             c.execute(
                 'SELECT * FROM asiomm_export '  # ...
-                'WHERE (dt_begin >=%s) AND (dt_begin < %s)', (d, d + ONE_DAY))
+                'WHERE (dt_begin >=%s) AND (dt_begin < %s)', (d - ONE_DAY, d))
             for rec in c:
                 yield rec
 
