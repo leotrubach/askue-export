@@ -26,4 +26,4 @@ def append_lines(f, lines):
         f.write(b'\n')
     for line in lines:
         f.write(line)
-        f.write('\n')
+        f.write(b'\n')
