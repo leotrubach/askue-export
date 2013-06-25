@@ -22,8 +22,8 @@ def append_lines(f, lines):
     Append lines to file
     """
     f.seek(-1, 2)
-    if f.read(1) == b'\n':
-        f.write(b'\n')
+    if f.read(1) != b'\n':
+        f.write(b'\r\n')
     for line in lines:
         f.write(line)
         f.write(b'\r\n')
