@@ -40,7 +40,7 @@ def record_to_csv(rec):
     line = ','.join((
         d.strftime('%Y%m%d'),
         '"{}"'.format(rec['numberrouter'].strip()),
-        '"{}"'.format(str(rec['id_locomotivedriver'])),
+        '"{}"'.format(str(rec['asiomm_id'])),
         '"{}"'.format(rec['fullname']),
         series_code, section_number, section_index,
         dt_begin, dt_end, '9',
