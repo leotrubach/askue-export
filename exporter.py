@@ -27,6 +27,9 @@ class Exporter(object):
             for rec in c:
                 yield rec
 
+    def close_connection(self):
+        self.conn.close()
+
 
 def record_to_csv(rec):
     d = datetime.now()

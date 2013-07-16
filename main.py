@@ -40,31 +40,39 @@ def date_from_filename(s):
 
 def process_askue():
     e = Exporter()
-    with FTP(S.FTP_SERVER, S.FTP_USER, S.FTP_PASSWORD) as fc:
-        # Find files and retrieve it
-        inbox_files = fc.mlsd(S.REMS_PATH)
-        filenames = [e[0] for e in inbox_files if askue_filename(e[0])]
-        if not filenames:
-            logging.info('Inbox directory is empty...')
-            return
-        if len(filenames) > 1:
-            logging.debug('More than 1 file were found: {}'.format('\n'.join(filenames)))
-        rfile = max(filenames, key=date_from_filename)
-        logging.info('Retrieving {}...'.format(rfile))
-        tf = NamedTemporaryFile()
-        fc.retrbinary('RETR {}'.format(j(S.REMS_PATH, rfile)), tf.write)
-        if S.APPEND_ON:
-            lines = (record_to_csv(rec) for rec in e.get_routes(datetime.now()))
-            append_lines(tf, lines)
-        tf.seek(0)
-        dest_path = j(S.IOMM_PATH, rfile)
-        # Send file back to FTP
-        logging.info('Sending file... {}'.format(dest_path))
-        fc.storbinary('STOR {}'.format(dest_path), tf)
-        logging.info('Cleaning up directory...')
-        for fname in filenames:
-            filepath = j(S.REMS_PATH, fname)
-            fc.delete(filepath)
+    try:
+        with FTP(S.FTP_SERVER, S.FTP_USER, S.FTP_PASSWORD) as fc:
+            # Find files and retrieve it
+            inbox_files = fc.mlsd(S.REMS_PATH)
+            filenames = [e[0] for e in inbox_files if askue_filename(e[0])]
+            if not filenames:
+                logging.info('Inbox directory is empty...')
+                return
+            if len(filenames) > 1:
+                logging.debug('More than 1 file were found: {}'.format('\n'.join(filenames)))
+            rfile = max(filenames, key=date_from_filename)
+            logging.info('Retrieving {}...'.format(rfile))
+            tf = NamedTemporaryFile()
+            fc.retrbinary('RETR {}'.format(j(S.REMS_PATH, rfile)), tf.write)
+            ftp_pos = tf.tell()
+            try:
+                if S.APPEND_ON:
+                    lines = (record_to_csv(rec) for rec in e.get_routes(datetime.now()))
+                    append_lines(tf, lines)
+            except Exception:
+                tf.seek(ftp_pos)
+                tf.truncate()
+            tf.seek(0)
+            dest_path = j(S.IOMM_PATH, rfile)
+            # Send file back to FTP
+            logging.info('Sending file... {}'.format(dest_path))
+            fc.storbinary('STOR {}'.format(dest_path), tf)
+            logging.info('Cleaning up directory...')
+            for fname in filenames:
+                filepath = j(S.REMS_PATH, fname)
+                fc.delete(filepath)
+    finally:
+        e.close_connection()
 
 
 def main():
