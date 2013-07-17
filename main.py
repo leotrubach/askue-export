@@ -41,7 +41,9 @@ def date_from_filename(s):
 def process_askue():
     e = Exporter()
     try:
+        logging.debug('Trying to connect to FTP server...')
         with FTP(S.FTP_SERVER, S.FTP_USER, S.FTP_PASSWORD) as fc:
+            logging.debug('Looking for files in FTP directory')
             # Find files and retrieve it
             inbox_files = fc.mlsd(S.REMS_PATH)
             filenames = [e[0] for e in inbox_files if askue_filename(e[0])]
@@ -49,7 +51,9 @@ def process_askue():
                 logging.info('Inbox directory is empty...')
                 return
             if len(filenames) > 1:
-                logging.debug('More than 1 file were found: {}'.format('\n'.join(filenames)))
+                logging.debug(
+                    'More than 1 file were found: {}'.format(
+                        '\n'.join(filenames)))
             rfile = max(filenames, key=date_from_filename)
             logging.info('Retrieving {}...'.format(rfile))
             tf = NamedTemporaryFile()
@@ -57,9 +61,12 @@ def process_askue():
             ftp_pos = tf.tell()
             try:
                 if S.APPEND_ON:
-                    lines = (record_to_csv(rec) for rec in e.get_routes(datetime.now()))
+                    lines = (record_to_csv(rec) for rec in
+                             e.get_routes(datetime.now()))
                     append_lines(tf, lines)
             except Exception:
+                logging.exception(
+                    'Error appending lines to file! Sending as is')
                 tf.seek(ftp_pos)
                 tf.truncate()
             tf.seek(0)

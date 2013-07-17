@@ -1,5 +1,5 @@
 from tempfile import NamedTemporaryFile
-
+from logging import debug
 
 def x100int(f):
     """
@@ -25,5 +25,6 @@ def append_lines(f, lines):
     if f.read(1) != b'\n':
         f.write(b'\r\n')
     for line in lines:
+        debug('>%s', line)
         f.write(line)
         f.write(b'\r\n')
