@@ -64,6 +64,9 @@ def process_askue():
                     lines = (record_to_csv(rec) for rec in
                              e.get_routes(datetime.now()))
                     append_lines(tf, lines)
+                else:
+                    logging.debug(
+                        'Will not append lines (switched off in settings)')
             except Exception:
                 logging.exception(
                     'Error appending lines to file! Sending as is')
