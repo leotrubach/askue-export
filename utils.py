@@ -9,7 +9,8 @@ def x100int(f):
     """
     if f is None:
         r = 0
-    r = f * 100
+    else:
+        r = f * 100
     return '{0:.0f}'.format(r)
 
 
