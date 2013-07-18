@@ -21,6 +21,7 @@ def append_lines(f, lines):
     """
     Append lines to file
     """
+    debug('Appending lines to file')
     f.seek(-1, 2)
     if f.read(1) != b'\n':
         f.write(b'\r\n')
