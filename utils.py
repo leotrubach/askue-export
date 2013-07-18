@@ -7,7 +7,10 @@ def x100int(f):
     :param f: float number to convert
     :return: int
     """
-    return '{0:.0f}'.format(f * 100)
+    if f is None:
+        r = 0
+    r = f * 100
+    return '{0:.0f}'.format(r)
 
 
 def get_temp_filename():
