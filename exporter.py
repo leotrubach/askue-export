@@ -37,7 +37,7 @@ def record_to_csv(rec):
     d = datetime.now()
     sectiod_id = rec['id_sectionoflocomotive']
     section_index = '"{0:02d}"'.format(sectiod_id % 10)
-    section_number = '"{0:05d}"'.format((sectiod_id // 100) % 100000)
+    section_number = '"{0:05d}"'.format((sectiod_id // 10) % 100000)
     series_code = '"{0:03d}"'.format(sectiod_id // 1000000)
     dt_begin = '"%s"' % (rec['dt_begin'].strftime('%Y-%m-%d-%H.%M.%S.%f'))
     dt_end = '"%s"' % (rec['dt_end'].strftime('%Y-%m-%d-%H.%M.%S.%f'), )
