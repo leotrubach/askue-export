@@ -42,7 +42,7 @@ def process_askue():
     e = Exporter()
     try:
         logging.debug('Trying to connect to FTP server...')
-        with FTP(S.FTP_SERVER, S.FTP_USER, S.FTP_PASSWORD) as fc:
+        with FTP(S.FTP_SERVER, S.FTP_USER, S.FTP_PASSWORD, timeout=5) as fc:
             logging.debug('Looking for files in FTP directory')
             # Find files and retrieve it
             inbox_files = fc.mlsd(S.REMS_PATH)
