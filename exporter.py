@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, time
 import psycopg2
 import psycopg2.extras
 from utils import x100int
@@ -21,11 +21,14 @@ class Exporter(object):
 
         :param d: Date for which we will export route data
         """
+        zdate = datetime.combine(d.date(), time())
+        start_date =  zdate - ONE_DAY - timedelta(hours=20)
+        end_date = zdate + ONE_DAY
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as c:
             c.execute(
                 'SELECT * FROM asiomm_export '  # ...
                 'WHERE (dt_begin >= %s) AND (dt_begin < %s)',
-                (d - ONE_DAY, d))
+                (start_date, end_date))
             for rec in c:
                 yield rec
 
@@ -37,11 +40,11 @@ def record_to_csv(rec):
     d = datetime.now()
     sectiod_id = rec['id_sectionoflocomotive']
     section_index = '"{0:02d}"'.format(sectiod_id % 10)
-    section_number = '"{0:05d}"'.format((sectiod_id // 10) % 100000)
+    section_number = '"{0:08d}"'.format((sectiod_id // 10) % 100000)
     series_code = '"{0:03d}"'.format(sectiod_id // 1000000)
-    dt_begin = '"%s"' % (rec['dt_begin'].strftime('%Y-%m-%d-%H.%M.%S.%f'))
-    dt_end = '"%s"' % (rec['dt_end'].strftime('%Y-%m-%d-%H.%M.%S.%f'), )
-    d_strftime = d.strftime('"%Y-%m-%d-%H.%M.%S.%f"')
+    dt_begin = '"%s"' % (rec['dt_begin'].strftime('%Y-%m-%d-%H.%M.%S.000000'))
+    dt_end = '"%s"' % (rec['dt_end'].strftime('%Y-%m-%d-%H.%M.%S.000000'), )
+    d_strftime = d.strftime('"%Y-%m-%d-%H.%M.%S.000000"')
     line = ','.join((
         d.strftime('%Y%m%d'),
         '"{}"'.format(rec['numberrouter'].strip()),
@@ -57,6 +60,7 @@ def record_to_csv(rec):
         x100int(rec['firstpokazrecup']),
         x100int(rec['lastpokazrecup']),
         '0',
+        x100int(rec['firstheatingpokaz']),
         x100int(rec['firstheatingpokaz']),
         x100int(rec['lastheatingpokaz']),
         '0', '0', '0',
