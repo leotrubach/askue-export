@@ -22,7 +22,7 @@ class Exporter(object):
         :param d: Date for which we will export route data
         """
         zdate = datetime.combine(d.date(), time())
-        start_date =  zdate - ONE_DAY - timedelta(hours=20)
+        start_date = zdate - ONE_DAY + timedelta(hours=20)
         end_date = zdate + ONE_DAY
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as c:
             c.execute(
